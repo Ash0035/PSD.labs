@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cctype>
 
 class RLE {
 public:
@@ -10,9 +11,8 @@ public:
         int count = 1;
 
         for (size_t i = 0; i < input.length(); ++i) {
-           
             if (i == input.length() - 1 || input[i] != input[i + 1]) {
-                encoded << input[i] << count;
+                encoded << input[i] << static_cast<char>(count);
                 count = 1; 
             } else {
                 ++count; 
@@ -22,23 +22,15 @@ public:
         return encoded.str();
     }
 
-   
     std::string decode(const std::string& input) {
         std::ostringstream decoded;
         for (size_t i = 0; i < input.length(); ++i) {
             char ch = input[i];
-            ++i; 
+            ++i;
 
             
-            std::string countStr;
-            while (i < input.length() && std::isdigit(input[i])) {
-                countStr += input[i];
-                ++i;
-            }
-            --i; 
-
-            int count = std::stoi(countStr); 
-            decoded << std::string(count, ch); 
+            int count = static_cast<int>(input[i]); 
+            decoded << std::string(count, ch);
         }
 
         return decoded.str();
